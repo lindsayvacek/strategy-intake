@@ -217,9 +217,68 @@
   }
 
   function bindToolbar() {
+    const sendBtn   = document.getElementById("btn-send");
     const exportBtn = document.getElementById("btn-export");
     const printBtn  = document.getElementById("btn-print");
     const resetBtn  = document.getElementById("btn-reset");
+
+    if (sendBtn) sendBtn.addEventListener("click", async () => {
+      const client = getVal("meta_client") || "";
+      const lead = getVal("meta_lead") || "";
+      const slug = (client || "intake").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const markdown = md();
+      const status = document.getElementById("save-status");
+
+      // 1. Download the file as backup so the user has a copy
+      download((slug || "intake") + ".md", markdown);
+
+      // 2. Try to copy markdown to clipboard so user can paste in their email
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(markdown);
+        copied = true;
+      } catch (e) { /* clipboard may be blocked in iframes */ }
+
+      // 3. Build mailto with subject + brief body
+      const subject = "Strategy Intake — " + (client || "New Client");
+      const intro = [
+        "Hi the DK team,",
+        "",
+        "Here are my answers from the strategy intake form.",
+        copied
+          ? "(The full markdown is on my clipboard — I'll paste it below this line.)"
+          : "(The markdown file just downloaded to my computer — attaching it.)",
+        "",
+        lead ? "From: " + lead + (client ? " · " + client : "") : "",
+        "",
+        "---",
+        ""
+      ].filter(Boolean).join("\n");
+
+      // Truncate body to fit mailto URL limits (~1800 chars after URL-encoding)
+      const maxBody = 1500;
+      const bodyText = markdown.length <= maxBody
+        ? intro + markdown
+        : intro + markdown.slice(0, maxBody) + "\n\n[…truncated. See attached file or paste from clipboard for the full version.]";
+
+      const mailto = "mailto:hello@thedesignkollective.com"
+        + "?subject=" + encodeURIComponent(subject)
+        + "&body=" + encodeURIComponent(bodyText);
+
+      // Use a temporary anchor to trigger mailto reliably from inside iframes
+      const a = document.createElement("a");
+      a.href = mailto;
+      a.target = "_top";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      if (status) {
+        status.textContent = "Sent — check your mail app. File also downloaded.";
+        status.classList.add("saved");
+      }
+    });
+
     if (exportBtn) exportBtn.addEventListener("click", () => {
       const client = getVal("meta_client") || "intake";
       const slug = client.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");

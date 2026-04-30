@@ -83,3 +83,20 @@ body {
     max-height: none !important;
   }
 }
+
+/* ==========================================================
+   Toolbar — make "Send to DK" the primary action
+   ========================================================== */
+.toolbar #btn-send.primary,
+#btn-send.primary {
+  background: var(--ink, #1A1A1A);
+  color: var(--cream, #F4EFE7);
+  border: 1px solid var(--ink, #1A1A1A);
+  font-weight: 600;
+}
+.toolbar #btn-send.primary:hover,
+#btn-send.primary:hover {
+  background: var(--sand, #A08767);
+  border-color: var(--sand, #A08767);
+  color: var(--cream, #F4EFE7);
+}
