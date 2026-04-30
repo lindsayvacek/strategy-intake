@@ -3,12 +3,28 @@
    Loaded AFTER styles.css. Print version untouched.
    ========================================================== */
 
-/* Switch from portrait letter (8.5in wide) to landscape (11in wide)
-   so the form spans the iframe width instead of being a narrow column. */
-:root {
-  --page-w: 11in !important;
-  --page-pad-x: 1.1in;
-  --page-pad-y: 0.75in;
+/* Switch from portrait letter (8.5in wide) to fluid landscape so the
+   form spans the iframe width.
+
+   IMPORTANT: must target `body` not `:root` — original CSS sets
+   --page-w on body via `body[data-page="letter"]` which beats :root
+   in the cascade for descendants regardless of !important. */
+body,
+body[data-page="letter"],
+body[data-page="a4"] {
+  --page-w: 100% !important;
+  --page-pad-x: 56px !important;
+  --page-pad-y: 56px !important;
+}
+
+/* Cap the absolute width so the form is still readable on very wide
+   screens, but otherwise let it span the iframe. */
+.page,
+.cover,
+.cover-meta {
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* Cover: landscape aspect ratio so the photo isn't wildly tall */
