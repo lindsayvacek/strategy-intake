@@ -8,8 +8,8 @@
 .cover {
   height: auto !important;
   min-height: auto !important;
-  aspect-ratio: 8.5 / 11;
-  max-height: 720px;
+  aspect-ratio: 16 / 9;
+  max-height: 420px;
 }
 
 /* Make body background transparent so it blends with the host page
@@ -65,7 +65,7 @@ body {
   height: auto !important;
   min-height: auto !important;
   aspect-ratio: 16 / 9;
-  max-height: 480px;
+  max-height: 280px;
 }
 
 @media (max-width: 880px) {
