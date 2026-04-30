@@ -55,3 +55,31 @@ body {
     background: var(--cream, #F4EFE7) !important;
   }
 }
+
+/* ==========================================================
+   Section dividers — photo-break uses 56vh which becomes
+   thousands of pixels tall in a tall iframe. Force fixed
+   sizing for embed mode.
+   ========================================================== */
+.photo-break {
+  height: auto !important;
+  min-height: auto !important;
+  aspect-ratio: 16 / 9;
+  max-height: 480px;
+}
+
+@media (max-width: 880px) {
+  .photo-break {
+    aspect-ratio: 4 / 3;
+    max-height: 320px;
+  }
+}
+
+@media print {
+  .photo-break {
+    aspect-ratio: auto !important;
+    height: 56vh !important;
+    min-height: 420px !important;
+    max-height: none !important;
+  }
+}
