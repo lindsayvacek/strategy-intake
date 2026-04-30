@@ -3,13 +3,20 @@
    Loaded AFTER styles.css. Print version untouched.
    ========================================================== */
 
-/* Cover: use aspect ratio instead of full viewport height
-   so the photo doesn't stretch wildly when the iframe is tall. */
+/* Switch from portrait letter (8.5in wide) to landscape (11in wide)
+   so the form spans the iframe width instead of being a narrow column. */
+:root {
+  --page-w: 11in !important;
+  --page-pad-x: 1.1in;
+  --page-pad-y: 0.75in;
+}
+
+/* Cover: landscape aspect ratio so the photo isn't wildly tall */
 .cover {
   height: auto !important;
   min-height: auto !important;
   aspect-ratio: 16 / 9;
-  max-height: 420px;
+  max-height: 480px;
 }
 
 /* Make body background transparent so it blends with the host page
